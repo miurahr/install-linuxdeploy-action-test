@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install LinuxDeploy
-        uses: miurahr/install-linuxdeploy-action@v1
+        uses: miurahr/install-linuxdeploy-action@v1.2.1
         with:
           plugins: qt appimage
       - name: List LinuxDeploy plugins
