@@ -4,17 +4,9 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v1
-      - name: Install LinuxDeploy
-        uses: miurahr/install-linuxdeploy-action@releases
-        with:
-          plugins: qt appimage
-      - name: List LinuxDeploy plugins
-        run: |
-          linuxdeploy-x86_64.AppImage --list-plugins
-        shell: bash
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
       - name: Install dependency
@@ -27,6 +19,14 @@ jobs:
           cd QtWidgetsApplication/
           qmake QtWidgetsApplication.pro
           make -j2
+        shell: bash
+      - name: Install LinuxDeploy
+        uses: miurahr/install-linuxdeploy-action@releases
+        with:
+          plugins: qt appimage
+      - name: List LinuxDeploy plugins
+        run: |
+          linuxdeploy-x86_64.AppImage --list-plugins
         shell: bash
       - name: Run linuxdeploy with Qt plugin
         run: |

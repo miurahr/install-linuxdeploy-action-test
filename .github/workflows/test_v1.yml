@@ -4,9 +4,22 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+      - name: Install dependency
+        run: |
+          sudo apt install -y libxkbcommon-x11-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-sync-dev  libxcb-render-util0-dev libxcb-shm0-dev
+        shell: bash
+      - name: Configure test Qt project
+        run: |
+          tar xJf test/QtWidgetsApplication.tar.xz
+          cd QtWidgetsApplication/
+          qmake QtWidgetsApplication.pro
+          make -j2
+        shell: bash
       - name: Install LinuxDeploy
         uses: miurahr/install-linuxdeploy-action@v1
         with:
@@ -14,19 +27,6 @@ jobs:
       - name: List LinuxDeploy plugins
         run: |
           linuxdeploy-x86_64.AppImage --list-plugins
-        shell: bash
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-      - name: Install dependency
-        run: |
-          sudo apt install -y libxkbcommon-x11-0
-        shell: bash
-      - name: Configure test Qt project
-        run: |
-          tar xJf QtWidgetsApplication.tar.xz
-          cd QtWidgetsApplication/
-          qmake QtWidgetsApplication.pro
-          make -j2
         shell: bash
       - name: Run linuxdeploy with Qt plugin
         run: |
